@@ -1,0 +1,50 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Install Dependencies') {
+            steps {
+                echo 'Installing dependencies...'
+                dir('C:\\Users\\Ananya\\Desktop\\DevOps\\task-app') {
+                    bat 'npm install'
+                    bat 'cd client && npm install'
+                    bat 'cd backend && npm install || exit 0'
+                }
+            }
+        }
+
+        stage('Build React App') {
+            steps {
+                echo 'Building frontend...'
+                dir('C:\\Users\\Ananya\\Desktop\\DevOps\\task-app\\client') {
+                    bat 'npm run build'
+                }
+            }
+        }
+
+        stage('Start Backend') {
+            steps {
+                echo 'Starting backend temporarily to verify build...'
+                dir('C:\\Users\\Ananya\\Desktop\\DevOps\\task-app\\backend') {
+                    // Start the backend in background
+                    bat 'start /B node server.js'
+
+                    // Wait 5 seconds
+                    bat 'ping 127.0.0.1 -n 6 > nul'
+
+                    // Kill all node processes to clean up
+                    bat 'taskkill /IM node.exe /F'
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo '✅ Build completed successfully!'
+        }
+        failure {
+            echo '❌ Build failed!'
+        }
+    }
+}

@@ -1,0 +1,16 @@
+{
+  "name": "task-app",
+  "version": "1.0.0",
+  "description": "A simple full-stack task management app using React and Node.js (no database)",
+  "main": "index.js",
+  "scripts": {
+    "start": "concurrently \"npm run start-client\" \"npm run start-backend\"",
+    "start-client": "cd client && npm start",
+    "start-backend": "cd backend && node server.js"
+  },
+  "author": "Ananya",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^8.2.0"
+  }
+}
